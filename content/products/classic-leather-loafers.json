@@ -1,0 +1,23 @@
+{
+  "sku": "SKU-001",
+  "title": "Classic Leather Loafers",
+  "slug": "classic-leather-loafers",
+  "division": "FASHION_BOUTIQUE",
+  "subPillar": "SHOES",
+  "category": "Footwear > Men",
+  "productType": "simple",
+  "shortSummary": "Handcrafted black calfskin slip-on loafers tailored for formal and smart-casual wear.",
+  "description": "Full-grain leather upper with cushioned insole and non-slip rubber sole. Made for formal and smart-casual wear.\n\nAvailable for same-day Abuja doorstep dispatch or complimentary Click-and-Collect fitting at **Suite 83 / Block B70, H&A Plaza, Wuye, Abuja**. Covered by our strict **24-hour return policy from receipt** (unworn, original packaging).",
+  "regularPriceNaira": 45000,
+  "salePriceNaira": 39500,
+  "stockQty": 25,
+  "wuyeFloorStock": 12,
+  "weightKg": 0.8,
+  "isWuyePickupEligible": true,
+  "featuredImage": "https://images.unsplash.com/photo-1614252369475-531eba835eb1?auto=format&fit=crop&w=1000&q=85",
+  "gallery": [
+    "https://images.unsplash.com/photo-1614252369475-531eba835eb1?auto=format&fit=crop&w=1000&q=85"
+  ],
+  "variants": [],
+  "published": true
+}

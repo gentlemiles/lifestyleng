@@ -1,0 +1,23 @@
+{
+  "sku": "LCN-MTN-5G-RTR-STD",
+  "title": "MTN 5G Broadband Router (Wi-Fi 6)",
+  "slug": "mtn-5g-home-broadband-router-wi-fi-6",
+  "division": "MTN_SERVICES",
+  "subPillar": "MTN_HARDWARE",
+  "category": "MTN Services > Routers & Hardware",
+  "productType": "simple",
+  "shortSummary": "Official MTN 5G indoor CPE Wi-Fi 6 router supporting up to 64 devices with 100GB welcome data.",
+  "description": "Official MTN 5G indoor CPE router with plug-and-play ultra-fast Wi-Fi 6 connectivity for Abuja homes and corporate offices. Connects up to 64 devices simultaneously with 100GB initial welcome data bonus.\n\nAvailable for doorstep delivery across Abuja or pickup at **Suite 83 / Block B70, H&A Plaza, Wuye, Abuja**. Bulk B2B orders available via our Garki corporate desk.",
+  "regularPriceNaira": 75000,
+  "salePriceNaira": 65000,
+  "stockQty": 15,
+  "wuyeFloorStock": 10,
+  "weightKg": 0.95,
+  "isWuyePickupEligible": true,
+  "featuredImage": "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=1000&q=85",
+  "gallery": [
+    "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=1000&q=85"
+  ],
+  "variants": [],
+  "published": true
+}

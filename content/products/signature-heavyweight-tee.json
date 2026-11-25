@@ -1,0 +1,57 @@
+{
+  "sku": "SKU-003",
+  "title": "Signature Heavyweight Tee",
+  "slug": "signature-heavyweight-tee",
+  "division": "FASHION_BOUTIQUE",
+  "subPillar": "CLOTHING",
+  "category": "Apparel > T-Shirts",
+  "productType": "variable",
+  "shortSummary": "300gsm boxy-fit cotton t-shirt available in M, L, and XL.",
+  "description": "Pre-shrunk 100% combed cotton t-shirt with ribbed crewneck collar and dropped shoulders.\n\nTry your fit in person at **Suite 83 / Block B70, H&A Plaza, Wuye, Abuja** or order online for Abuja doorstep dispatch. Eligible for returns within **24 hours of receipt**.",
+  "regularPriceNaira": 22000,
+  "salePriceNaira": 19500,
+  "stockQty": 45,
+  "wuyeFloorStock": 22,
+  "weightKg": 0.3,
+  "isWuyePickupEligible": true,
+  "featuredImage": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1000&q=85",
+  "gallery": [
+    "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=1000&q=85"
+  ],
+  "variants": [
+    {
+      "sku": "SKU-003-M",
+      "title": "Signature Heavyweight Tee - M",
+      "size": "M",
+      "colorName": "Obsidian Black",
+      "colorHex": "#121214",
+      "priceNaira": 22000,
+      "salePriceNaira": 19500,
+      "stockQty": 15,
+      "wuyeFloorStock": 8
+    },
+    {
+      "sku": "SKU-003-L",
+      "title": "Signature Heavyweight Tee - L",
+      "size": "L",
+      "colorName": "Obsidian Black",
+      "colorHex": "#121214",
+      "priceNaira": 22000,
+      "salePriceNaira": 19500,
+      "stockQty": 20,
+      "wuyeFloorStock": 9
+    },
+    {
+      "sku": "SKU-003-XL",
+      "title": "Signature Heavyweight Tee - XL",
+      "size": "XL",
+      "colorName": "Obsidian Black",
+      "colorHex": "#121214",
+      "priceNaira": 24000,
+      "salePriceNaira": 21000,
+      "stockQty": 10,
+      "wuyeFloorStock": 5
+    }
+  ],
+  "published": true
+}

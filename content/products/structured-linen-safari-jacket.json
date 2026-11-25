@@ -1,0 +1,57 @@
+{
+  "sku": "LCN-FSH-SAF-001",
+  "title": "Structured Linen Safari Jacket",
+  "slug": "structured-linen-safari-jacket-desert-sand",
+  "division": "FASHION_BOUTIQUE",
+  "subPillar": "CLOTHING",
+  "category": "Apparel > Outerwear",
+  "productType": "variable",
+  "shortSummary": "100% breathable Italian linen safari jacket in Desert Sand and Olive Green.",
+  "description": "Unstructured beige linen safari jacket tailored with dual pleated flap chest pockets and horn buttons. Vetted for immediate concierge fitting at **Suite 83 / Block B70, H&A Plaza, Wuye, Abuja** or same-day FCT dispatch.\n\nStrict **24-hour return & exchange guarantee upon receipt**.",
+  "regularPriceNaira": 56000,
+  "salePriceNaira": 48500,
+  "stockQty": 19,
+  "wuyeFloorStock": 12,
+  "weightKg": 0.65,
+  "isWuyePickupEligible": true,
+  "featuredImage": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=1000&q=85",
+  "gallery": [
+    "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=1000&q=85"
+  ],
+  "variants": [
+    {
+      "sku": "LCN-FSH-SAF-M-SND",
+      "title": "Medium (M) / Desert Sand",
+      "size": "M",
+      "colorName": "Desert Sand",
+      "colorHex": "#E3D9C6",
+      "priceNaira": 56000,
+      "salePriceNaira": 48500,
+      "stockQty": 6,
+      "wuyeFloorStock": 4
+    },
+    {
+      "sku": "LCN-FSH-SAF-L-SND",
+      "title": "Large (L) / Desert Sand",
+      "size": "L",
+      "colorName": "Desert Sand",
+      "colorHex": "#E3D9C6",
+      "priceNaira": 56000,
+      "salePriceNaira": 48500,
+      "stockQty": 8,
+      "wuyeFloorStock": 5
+    },
+    {
+      "sku": "LCN-FSH-SAF-XL-OLV",
+      "title": "Extra Large (XL) / Olive Green",
+      "size": "XL",
+      "colorName": "Olive Green",
+      "colorHex": "#1C2826",
+      "priceNaira": 56000,
+      "salePriceNaira": 48500,
+      "stockQty": 5,
+      "wuyeFloorStock": 3
+    }
+  ],
+  "published": true
+}

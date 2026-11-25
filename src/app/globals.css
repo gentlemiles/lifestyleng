@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+:root {
+  /* Lifestyle Corporate Precision — Apple HIG Surface Hierarchy */
+  --bg-canvas: #FCF8FB;              /* Editorial warm alabaster canvas */
+  --bg-canvas-alt: #F5F5F7;          /* Cupertino neutral backdrop */
+  --bg-surface: #FFFFFF;             /* Pure white elevated Bento & product cards */
+  --bg-surface-low: #F6F3F5;         /* Secondary input & well container */
+  --bg-surface-container: #F0EDEF;   /* Pill tracks & subtle containers */
+  --bg-surface-high: #EAE7EA;        /* Active pill & hover container */
+  --bg-glass: rgba(255, 255, 255, 0.82); /* Frosted sticky header & drawer */
+  --bg-obsidian: #001026;            /* Deep Corporate Obsidian Navy */
+
+  /* Typography Ink Hierarchy */
+  --text-primary: #1B1B1D;           /* Editorial obsidian for headlines & body */
+  --text-secondary: #44474E;         /* Supporting descriptions & metadata */
+  --text-muted: #74777F;             /* Captions, SKUs, and legal disclaimers */
+  --text-on-dark: #F3F0F2;           /* Text on dark obsidian surfaces */
+
+  /* Corporate & Division Semantic Accents */
+  --brand-primary: #001026;          /* Primary obsidian navy */
+  --brand-navy: #0B2545;             /* Lifestyle Corporate Networks Ltd. container */
+  --brand-teal: #006A6A;             /* Lifestyle Teal interactive & verified accent */
+  --brand-teal-light: #93F2F2;       /* Secondary fixed highlight */
+  --mtn-gold: #D0A600;               /* MTN FibreX & Telecom container accent */
+  --mtn-gold-bright: #FFCC00;        /* Official MTN badge & CTA accent */
+  --mtn-gold-tint: #FFE08B;
+  --whatsapp-emerald: #10B981;       /* WhatsApp concierge & live status beacon */
+  --whatsapp-surface: #ECFDF5;
+  --whatsapp-ink: #047857;
+
+  /* Status & Feedback Tokens */
+  --status-warning-bg: #FFFBEB;
+  --status-warning-ink: #B45309;
+  --status-danger: #BA1A1A;
+  --border-hairline: rgba(27, 27, 29, 0.06);
+  --border-focus: #006A6A;
+
+  /* Apple Continuous Squircle Radii */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-2xl: 28px;
+  --radius-pill: 9999px;
+
+  /* Multi-Layered Ambient Occlusion Shadows */
+  --shadow-rest: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 12px 24px -4px rgba(0, 0, 0, 0.04);
+  --shadow-hover: 0 20px 32px -8px rgba(0, 0, 0, 0.07), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+  --shadow-modal: 0 24px 48px -12px rgba(0, 16, 38, 0.16);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display), -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}

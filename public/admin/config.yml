@@ -1,0 +1,246 @@
+# ==============================================================================
+# LifestyleNG.com — Decap CMS Configuration (Hostinger Tier 2: Growth Unlimited)
+# Parent Organization: Lifestyle Corporate Networks Ltd. (Abuja, Nigeria)
+# Access URL: https://lifestyleng.com/admin/index.html
+# Note: The built-in Next.js operations dashboard remains at /admin
+# ==============================================================================
+
+backend:
+  name: github
+  # IMPORTANT: Replace with your real GitHub organization/username and repository name
+  # before publishing from production (e.g., lifestylecorporatenetworks/lifestyleng).
+  repo: YOUR_GITHUB_USERNAME/lifestyleng
+  branch: main
+  # Hostinger Tier 2 GitHub OAuth Proxy (required for browser login with GitHub backend):
+  # Deploy a lightweight GitHub OAuth handler (e.g., Cloudflare Worker or Hostinger Node route)
+  # and uncomment the two lines below once your OAuth App callback URL is configured.
+  # See docs/HOSTINGER_DEPLOYMENT.md Section 6 for full setup steps.
+  # base_url: https://oauth.lifestyleng.com
+  # auth_endpoint: /auth
+
+# Enables local Git editing when running `npx decap-server` on localhost (ignored on HTTPS production)
+local_backend: true
+
+# Direct publishing to `main` for fast store updates.
+# Switch to `editorial_workflow` if you prefer draft Pull Request reviews before publishing.
+publish_mode: simple
+
+site_url: https://lifestyleng.com
+display_url: https://lifestyleng.com
+logo_url: /images/lcn-logo-full.png
+
+# Uploaded product & apartment imagery stored inside Next.js public assets
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  # ----------------------------------------------------------------------------
+  # 1. PRODUCTS (Fashion Boutique & MTN Telecom Hardware Catalog)
+  # ----------------------------------------------------------------------------
+  - name: "products"
+    label: "Products"
+    label_singular: "Product"
+    description: "Manage Wuye Fashion Boutique items (clothing, shoes, bags, accessories) and MTN hardware SKUs."
+    folder: "content/products"
+    create: true
+    delete: true
+    extension: "json"
+    format: "json"
+    slug: "{{slug}}"
+    identifier_field: "title"
+    summary: "{{sku}} — {{title}} (₦{{regularPriceNaira}})"
+    fields:
+      - { label: "SKU", name: "sku", widget: "string", hint: "Unique product code without spaces (e.g., SKU-001)" }
+      - { label: "Product Title", name: "title", widget: "string" }
+      - { label: "URL Slug", name: "slug", widget: "string", hint: "Lowercase URL path segment (e.g., classic-leather-loafers)" }
+      - label: "Corporate Division"
+        name: "division"
+        widget: "select"
+        default: "FASHION_BOUTIQUE"
+        options:
+          - { label: "Lifestyle Boutique (Fashion)", value: "FASHION_BOUTIQUE" }
+          - { label: "Lifestyle MTN Services", value: "MTN_SERVICES" }
+      - label: "Sub-Pillar"
+        name: "subPillar"
+        widget: "select"
+        default: "CLOTHING"
+        options:
+          - { label: "Clothing & Apparel", value: "CLOTHING" }
+          - { label: "Shoes & Footwear", value: "SHOES" }
+          - { label: "Bags & Leather Goods", value: "BAGS" }
+          - { label: "Accessories", value: "ACCESSORIES" }
+          - { label: "MTN Routers & Hardware", value: "MTN_HARDWARE" }
+      - { label: "Category Hierarchy", name: "category", widget: "string", hint: "Use '>' for subcategories (e.g., Footwear > Men)" }
+      - label: "Product Type"
+        name: "productType"
+        widget: "select"
+        default: "simple"
+        options:
+          - { label: "Simple (Single Option)", value: "simple" }
+          - { label: "Variable (Sizes / Colors)", value: "variable" }
+      - { label: "Short Summary", name: "shortSummary", widget: "text", hint: "1–2 sentences shown beside Add-to-Cart" }
+      - { label: "Full Description", name: "description", widget: "markdown", hint: "Detailed fabric, sizing, Wuye pickup & 24-hour return notes" }
+      - { label: "Regular Price (NGN)", name: "regularPriceNaira", widget: "number", value_type: "int", min: 0, hint: "Plain Naira amount without commas or ₦ symbol" }
+      - { label: "Sale Price (NGN)", name: "salePriceNaira", widget: "number", value_type: "int", min: 0, required: false, hint: "Optional promotional price in Naira" }
+      - { label: "Total Online Stock Qty", name: "stockQty", widget: "number", value_type: "int", min: 0, default: 10 }
+      - { label: "Wuye Boutique Floor Stock", name: "wuyeFloorStock", widget: "number", value_type: "int", min: 0, default: 5 }
+      - { label: "Weight (kg)", name: "weightKg", widget: "number", value_type: "float", min: 0, required: false }
+      - { label: "Wuye Click-and-Collect Eligible", name: "isWuyePickupEligible", widget: "boolean", default: true }
+      - { label: "Featured Image", name: "featuredImage", widget: "image", required: false }
+      - label: "Gallery Images"
+        name: "gallery"
+        widget: "list"
+        required: false
+        field: { label: "Image", name: "image", widget: "image" }
+      - label: "Variations (for Variable Products)"
+        name: "variants"
+        widget: "list"
+        required: false
+        summary: "{{fields.sku}} — {{fields.title}} (₦{{fields.priceNaira}})"
+        fields:
+          - { label: "Variation SKU", name: "sku", widget: "string" }
+          - { label: "Variation Label", name: "title", widget: "string" }
+          - { label: "Size", name: "size", widget: "string", required: false }
+          - { label: "Color Name", name: "colorName", widget: "string", required: false }
+          - { label: "Color Hex", name: "colorHex", widget: "string", required: false }
+          - { label: "Regular Price (NGN)", name: "priceNaira", widget: "number", value_type: "int", min: 0 }
+          - { label: "Sale Price (NGN)", name: "salePriceNaira", widget: "number", value_type: "int", min: 0, required: false }
+          - { label: "Stock Qty", name: "stockQty", widget: "number", value_type: "int", min: 0 }
+          - { label: "Wuye Floor Stock", name: "wuyeFloorStock", widget: "number", value_type: "int", min: 0, default: 0 }
+      - { label: "Published", name: "published", widget: "boolean", default: true }
+
+  # ----------------------------------------------------------------------------
+  # 2. CATEGORIES (Catalog & Division Taxonomies)
+  # ----------------------------------------------------------------------------
+  - name: "categories"
+    label: "Categories"
+    label_singular: "Category"
+    description: "Organize product collections, telecom hardware groups, and apartment tiers."
+    folder: "content/categories"
+    create: true
+    delete: true
+    extension: "json"
+    format: "json"
+    slug: "{{slug}}"
+    identifier_field: "name"
+    summary: "{{division}} › {{name}}"
+    fields:
+      - { label: "Category Name", name: "name", widget: "string" }
+      - { label: "URL Slug", name: "slug", widget: "string" }
+      - label: "Corporate Division"
+        name: "division"
+        widget: "select"
+        default: "FASHION_BOUTIQUE"
+        options:
+          - { label: "Lifestyle Boutique (Fashion)", value: "FASHION_BOUTIQUE" }
+          - { label: "Lifestyle Boutique (Homes)", value: "HOMES" }
+          - { label: "Lifestyle Logistics", value: "LOGISTICS" }
+          - { label: "Lifestyle MTN Services", value: "MTN_SERVICES" }
+      - { label: "Parent Category", name: "parentCategory", widget: "string", required: false, hint: "Optional parent name (e.g., Footwear, Apparel, Bags)" }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Sort Order", name: "sortOrder", widget: "number", value_type: "int", default: 10 }
+      - { label: "Category Cover Image", name: "featuredImage", widget: "image", required: false }
+      - { label: "Active", name: "active", widget: "boolean", default: true }
+
+  # ----------------------------------------------------------------------------
+  # 3. PAGES (Storefront Landing Copy & Editorial Pages)
+  # ----------------------------------------------------------------------------
+  - name: "pages"
+    label: "Pages"
+    label_singular: "Page"
+    description: "Edit storefront hero copy, SEO metadata, and page body sections."
+    folder: "content/pages"
+    create: true
+    delete: false
+    extension: "md"
+    format: "frontmatter"
+    slug: "{{slug}}"
+    identifier_field: "title"
+    summary: "{{title}} ({{route}})"
+    fields:
+      - { label: "Page Title", name: "title", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string" }
+      - { label: "App Route", name: "route", widget: "string", hint: "Matching Next.js route (e.g., /, /about, /contact, /mtn-services/fibrex)" }
+      - { label: "Hero Eyebrow", name: "heroEyebrow", widget: "string" }
+      - { label: "Hero Headline", name: "heroHeadline", widget: "string" }
+      - { label: "Hero Description", name: "heroDescription", widget: "text" }
+      - { label: "SEO Meta Title", name: "seoTitle", widget: "string" }
+      - { label: "SEO Meta Description", name: "seoDescription", widget: "text" }
+      - { label: "Primary CTA Label", name: "ctaLabel", widget: "string", required: false }
+      - { label: "Primary CTA Link", name: "ctaHref", widget: "string", required: false }
+      - { label: "Page Body", name: "body", widget: "markdown" }
+
+  # ----------------------------------------------------------------------------
+  # 4. APARTMENTS (Lifestyle Boutique Homes — Short-Let & Furnished Stays)
+  # ----------------------------------------------------------------------------
+  - name: "apartments"
+    label: "Apartments"
+    label_singular: "Apartment"
+    description: "Manage short-let duplexes, furnished corporate suites, rooms, rates, and amenities."
+    folder: "content/apartments"
+    create: true
+    delete: true
+    extension: "json"
+    format: "json"
+    slug: "{{slug}}"
+    identifier_field: "title"
+    summary: "{{district}} — {{title}} (₦{{nightlyRateNaira}}/night)"
+    fields:
+      - { label: "Property Title", name: "title", widget: "string" }
+      - { label: "URL Slug", name: "slug", widget: "string" }
+      - label: "Apartment Category"
+        name: "category"
+        widget: "select"
+        default: "Short-Let Duplex"
+        options:
+          - "Short-Let Duplex"
+          - "Executive Suite"
+          - "Diplomatic Penthouse"
+          - "Furnished Apartment"
+      - { label: "District", name: "district", widget: "string", hint: "e.g., Kaura District, Abuja" }
+      - { label: "Estate Name", name: "estateName", widget: "string", hint: "e.g., Prince & Princess Estate" }
+      - { label: "Full Street Address", name: "address", widget: "text" }
+      - { label: "Flagship Property", name: "isFlagship", widget: "boolean", default: false }
+      - { label: "Bedrooms", name: "bedrooms", widget: "number", value_type: "int", min: 1 }
+      - { label: "Bathrooms", name: "bathrooms", widget: "number", value_type: "int", min: 1 }
+      - { label: "Max Guests", name: "maxGuests", widget: "number", value_type: "int", min: 1 }
+      - { label: "Living Room Size (sqm)", name: "livingRoomSizeSqm", widget: "number", value_type: "int", min: 1, required: false }
+      - { label: "Default En-Suite Size (sqm)", name: "defaultEnsuiteSizeSqm", widget: "number", value_type: "int", min: 1, required: false }
+      - { label: "Nightly Rate — Whole Apartment (NGN)", name: "nightlyRateNaira", widget: "number", value_type: "int", min: 0 }
+      - { label: "Weekly Rate (NGN)", name: "weeklyRateNaira", widget: "number", value_type: "int", min: 0, required: false }
+      - { label: "Monthly Rate (NGN)", name: "monthlyRateNaira", widget: "number", value_type: "int", min: 0, required: false }
+      - { label: "Refundable Caution Deposit (NGN)", name: "cautionDepositNaira", widget: "number", value_type: "int", min: 0, default: 50000 }
+      - { label: "Subtitle", name: "subtitle", widget: "string" }
+      - { label: "About This Stay", name: "aboutIntro", widget: "text" }
+      - { label: "Our Promise", name: "ourPromise", widget: "text", required: false }
+      - { label: "Hero Image", name: "featuredImage", widget: "image" }
+      - label: "Gallery Images"
+        name: "gallery"
+        widget: "list"
+        required: false
+        field: { label: "Image", name: "image", widget: "image" }
+      - label: "Bookable Rooms"
+        name: "rooms"
+        widget: "list"
+        required: false
+        summary: "{{fields.name}} — {{fields.bedType}} (₦{{fields.nightlyRateNaira}}/night)"
+        fields:
+          - { label: "Room ID", name: "id", widget: "string" }
+          - { label: "Room Name", name: "name", widget: "string" }
+          - { label: "Room Size (sqm)", name: "roomSizeSqm", widget: "number", value_type: "int", min: 1 }
+          - { label: "En-Suite Size (sqm)", name: "ensuiteSizeSqm", widget: "number", value_type: "int", min: 1 }
+          - { label: "Bed Configuration", name: "bedType", widget: "string" }
+          - { label: "Max Occupancy", name: "occupancy", widget: "number", value_type: "int", min: 1 }
+          - { label: "Nightly Rate (NGN)", name: "nightlyRateNaira", widget: "number", value_type: "int", min: 0 }
+          - { label: "Room Photo", name: "imageUrl", widget: "image" }
+          - { label: "Room Description", name: "description", widget: "text" }
+      - label: "Amenities"
+        name: "amenities"
+        widget: "list"
+        field: { label: "Amenity", name: "item", widget: "string" }
+      - label: "House Rules"
+        name: "houseRules"
+        widget: "list"
+        required: false
+        field: { label: "Rule", name: "rule", widget: "string" }
+      - { label: "Published", name: "published", widget: "boolean", default: true }

@@ -1,0 +1,95 @@
+{
+  "title": "The Residence at Prince & Princess — 4-Bedroom Luxury Duplex",
+  "slug": "kaura-4-bedroom-luxury-duplex",
+  "category": "Short-Let Duplex",
+  "district": "Kaura District, Abuja",
+  "estateName": "Prince & Princess Estate",
+  "address": "House 43, 1st Crescent, Off Drive 2, Prince & Princess Estate, First gate, opposite Kaura Market, Kaura District",
+  "isFlagship": true,
+  "bedrooms": 4,
+  "bathrooms": 5,
+  "maxGuests": 8,
+  "livingRoomSizeSqm": 22,
+  "defaultEnsuiteSizeSqm": 3,
+  "nightlyRateNaira": 120000,
+  "weeklyRateNaira": 780000,
+  "monthlyRateNaira": 2950000,
+  "cautionDepositNaira": 50000,
+  "subtitle": "4 Rooms All En-Suite (2 Double Beds, 4 Single Beds • Max 8 Persons) • Rent Per Room or Whole Apartment • Kaura District, Abuja",
+  "aboutIntro": "Experience comfort, convenience and relaxation in our fully furnished apartment, thoughtfully designed to provide a cosy, homely and enjoyable stay for individuals, families and business travellers.",
+  "ourPromise": "A comfortable home away from home, where convenience meets relaxation and every detail is designed to make your stay enjoyable.",
+  "featuredImage": "/images/stays/prince-and-princess/living-room-hero.jpg",
+  "gallery": [
+    "/images/stays/prince-and-princess/living-room-hero.jpg",
+    "/images/stays/prince-and-princess/living-room-ayo-and-lounge.jpg",
+    "/images/stays/prince-and-princess/deluxe-room-1.jpg",
+    "/images/stays/prince-and-princess/dining-and-coffee-bar.jpg",
+    "/images/stays/prince-and-princess/table-soccer-recreation.jpg",
+    "/images/stays/prince-and-princess/equipped-kitchen.jpg",
+    "/images/stays/prince-and-princess/ensuite-bathroom.jpg",
+    "/images/stays/prince-and-princess/exterior-front.jpg"
+  ],
+  "rooms": [
+    {
+      "id": "room-kaura-deluxe-1",
+      "name": "Deluxe Room 1",
+      "roomSizeSqm": 15,
+      "ensuiteSizeSqm": 3,
+      "bedType": "1 Queen-size bed",
+      "occupancy": 2,
+      "nightlyRateNaira": 58000,
+      "imageUrl": "/images/stays/prince-and-princess/deluxe-room-1.jpg",
+      "description": "Spacious 15 sqm primary suite with a 3 sqm private en-suite bathroom, Queen-size bed, Smart Cable TV, and MTN FibreX Wi-Fi."
+    },
+    {
+      "id": "room-kaura-deluxe-2",
+      "name": "Deluxe Room 2",
+      "roomSizeSqm": 14,
+      "ensuiteSizeSqm": 3,
+      "bedType": "1 Queen-size bed",
+      "occupancy": 2,
+      "nightlyRateNaira": 55000,
+      "imageUrl": "/images/stays/prince-and-princess/deluxe-room-2.jpg",
+      "description": "Bright 14 sqm room with a 3 sqm private en-suite bathroom, Queen-size bed, split A/C, and wall mirror."
+    },
+    {
+      "id": "room-kaura-double-1",
+      "name": "Double Room 1",
+      "roomSizeSqm": 14,
+      "ensuiteSizeSqm": 3,
+      "bedType": "2 Single beds",
+      "occupancy": 2,
+      "nightlyRateNaira": 55000,
+      "imageUrl": "/images/stays/prince-and-princess/double-room-1.jpg",
+      "description": "Well-appointed 14 sqm twin room with 2 single beds and a 3 sqm private en-suite bathroom."
+    },
+    {
+      "id": "room-kaura-double-2",
+      "name": "Double Room 2",
+      "roomSizeSqm": 12,
+      "ensuiteSizeSqm": 3,
+      "bedType": "2 Single beds",
+      "occupancy": 2,
+      "nightlyRateNaira": 50000,
+      "imageUrl": "/images/stays/prince-and-princess/double-room-2.jpg",
+      "description": "Cosy 12 sqm twin room featuring 2 single beds and a 3 sqm private en-suite bathroom."
+    }
+  ],
+  "amenities": [
+    "4 Rooms All En-Suite (2 Double Beds & 4 Single Beds • Max 8 Persons)",
+    "Flexible Rental: Can Be Rented Per Room or Whole Apartment",
+    "24/7 Electricity Supported by Solar Panels & Battery Backup",
+    "Fast MTN FibreX Wi-Fi & Smart Cable TV (Netflix & YouTube)",
+    "24/7 Security Personnel, Outdoor Cameras & Security-Code Entrance",
+    "Fully Equipped Kitchen (Microwave, Oven, Gas Burner, Coffee Maker & Extractor)",
+    "Table Soccer, Traditional Ayo Board Game & Books Collection",
+    "Professional Cleaning & Housekeeping Three Times a Week"
+  ],
+  "houseRules": [
+    "Check-in from 2:00 PM; Check-out by 11:00 AM",
+    "Maximum occupancy of 8 guests",
+    "No pets allowed",
+    "Refundable caution deposit of ₦50,000 applies"
+  ],
+  "published": true
+}

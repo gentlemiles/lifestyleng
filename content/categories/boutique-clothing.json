@@ -1,0 +1,9 @@
+{
+  "name": "Apparel > Outerwear & Menswear",
+  "slug": "boutique-clothing",
+  "division": "FASHION_BOUTIQUE",
+  "parentCategory": "Apparel",
+  "description": "Italian linen safari jackets, fine merino knitwear, tailored cotton trousers, and resort shirts from Suite 83, H&A Plaza, Wuye.",
+  "sortOrder": 4,
+  "active": true
+}

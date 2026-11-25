@@ -1,0 +1,88 @@
+# ==============================================================================
+# LifestyleNG.com — Hostinger LiteSpeed / Apache Configuration (.htaccess)
+# Parent Organization: Lifestyle Corporate Networks Ltd. (Abuja, Nigeria)
+#
+# HOSTINGER DEPLOYMENT NOTES:
+# - On Hostinger Node.js Web App hosting (recommended for Next.js 15 App Router,
+#   Server Actions, Checkout, and `/admin`), LiteSpeed proxies requests to Node
+#   while honoring HTTPS enforcement, static caching, and security headers here.
+# - Decap CMS is served statically at `/admin/index.html` and `/admin/config.yml`
+#   without interfering with the Next.js App Router dashboard at `/admin`.
+# ==============================================================================
+
+Options -Indexes
+
+# Block direct web access to dotfiles and sensitive configuration files
+<FilesMatch "^\.(env|git|htaccess|htpasswd)">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # 1. Enforce HTTPS (proxy-safe for Hostinger LiteSpeed / Cloudflare SSL)
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # 2. Optional canonical apex domain redirect (uncomment once lifestyleng.com DNS is active)
+  # RewriteCond %{HTTP_HOST} ^www\.lifestyleng\.com$ [NC]
+  # RewriteRule ^ https://lifestyleng.com%{REQUEST_URI} [L,R=301]
+
+  # 3. Permanent 308 redirect for legacy MTN FibreX route (mirrors next.config.ts)
+  RewriteRule ^mtn-fibrex/?$ /mtn-services/fibrex [L,R=308]
+
+  # 4. Serve Decap CMS static entry directly without falling through
+  RewriteRule ^admin/index\.html$ - [L]
+  RewriteRule ^admin/config\.yml$ - [L]
+
+  # 5. Serve existing static files and directories directly
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+</IfModule>
+
+# Browser Caching for Optimized Images & Static Assets
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/avif "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+# Fine-Grained Cache-Control & Security Headers
+<IfModule mod_headers.c>
+  Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(self)"
+
+  # Immutable caching for /images/* assets (including Prince & Princess stays and Decap uploads)
+  <FilesMatch "\.(avif|webp|jpe?g|png|svg|ico|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Never cache Decap CMS config.yml so collection schema changes load immediately
+  <FilesMatch "^config\.yml$">
+    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+  </FilesMatch>
+</IfModule>
+
+# Text Compression (LiteSpeed & Apache mod_deflate)
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/plain text/html text/xml text/css text/javascript application/javascript application/json application/xml image/svg+xml
+</IfModule>

@@ -1,0 +1,62 @@
+{
+  "title": "Wuye Heights 2-Bedroom Executive Suite",
+  "slug": "wuye-2-bedroom-executive-furnished-suite",
+  "category": "Executive Suite",
+  "district": "Wuye District, Abuja",
+  "estateName": "Wuye Executive Courts",
+  "address": "Plot 18, Off Olusegun Obasanjo Way, Wuye District, Abuja, FCT",
+  "isFlagship": false,
+  "bedrooms": 2,
+  "bathrooms": 3,
+  "maxGuests": 4,
+  "livingRoomSizeSqm": 18,
+  "defaultEnsuiteSizeSqm": 3,
+  "nightlyRateNaira": 75000,
+  "weeklyRateNaira": 480000,
+  "monthlyRateNaira": 1800000,
+  "cautionDepositNaira": 30000,
+  "subtitle": "Short-Stay & Monthly Corporate Lease • 3 Mins from H&A Plaza, Wuye",
+  "aboutIntro": "Modern 2-bedroom corporate suite in Wuye District, positioned three minutes from our Suite 83, H&A Plaza boutique.",
+  "ourPromise": "Reliable corporate comfort with uninterrupted solar hybrid power and fiber connectivity.",
+  "featuredImage": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=85",
+  "gallery": [
+    "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=85"
+  ],
+  "rooms": [
+    {
+      "id": "room-wuye-1",
+      "name": "Executive Room 1",
+      "roomSizeSqm": 14,
+      "ensuiteSizeSqm": 3,
+      "bedType": "1 Queen-size bed",
+      "occupancy": 2,
+      "nightlyRateNaira": 42000,
+      "imageUrl": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=85",
+      "description": "Primary en-suite bedroom with Queen-size bed and work desk."
+    },
+    {
+      "id": "room-wuye-2",
+      "name": "Executive Room 2",
+      "roomSizeSqm": 13,
+      "ensuiteSizeSqm": 3,
+      "bedType": "1 Queen-size bed",
+      "occupancy": 2,
+      "nightlyRateNaira": 38000,
+      "imageUrl": "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=85",
+      "description": "Second en-suite bedroom with Queen-size bed."
+    }
+  ],
+  "amenities": [
+    "2 En-Suite Bedrooms",
+    "24/7 Power & Solar Hybrid System",
+    "High-Speed MTN FibreX Internet & Dedicated Workspace",
+    "Walking Distance to Suite 83, H&A Plaza, Wuye",
+    "Gated Access & CCTV Surveillance"
+  ],
+  "houseRules": [
+    "Check-in from 2:00 PM; Check-out by 11:00 AM",
+    "Maximum occupancy of 4 guests",
+    "No pets allowed"
+  ],
+  "published": true
+}
