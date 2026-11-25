@@ -27,7 +27,7 @@ import {
   SEED_PRODUCTS_ALL,
   SEED_STAY_PROPERTIES,
 } from '@/lib/db/seed-data';
-import { readCmsStore } from '@/server/services/cms-store';
+import { readCmsStoreAsync } from '@/server/services/cms-store';
 import {
   calculateOrderTotalKobo,
   calculateStayQuoteKobo,
@@ -63,7 +63,7 @@ export async function upsertCartItemAction(
   }
 
   const { variantId, quantity } = parsed.data;
-  const store = readCmsStore();
+  const store = await readCmsStoreAsync();
   const variant =
     store.products.flatMap((p) => p.variants).find((v) => v.id === variantId) ??
     SEED_PRODUCTS_ALL.flatMap((p) => p.variants).find((v) => v.id === variantId);
@@ -216,7 +216,7 @@ export async function initializeCheckoutAction(
     aggregatedQuantities.set(item.variantId, nextQty);
   }
 
-  const store = readCmsStore();
+  const store = await readCmsStoreAsync();
   const resolvedItems: { unitPriceKobo: number; quantity: number }[] = [];
   let totalItemCount = 0;
 
@@ -448,7 +448,7 @@ export async function submitStayBookingAction(
     };
   }
 
-  const store = readCmsStore();
+  const store = await readCmsStoreAsync();
   const property =
     store.stayProperties.find((p) => p.id === parsed.data.propertyId) ??
     SEED_STAY_PROPERTIES.find((p) => p.id === parsed.data.propertyId) ??
@@ -635,7 +635,7 @@ export async function submitCarHireBookingAction(
     };
   }
 
-  const store = readCmsStore();
+  const store = await readCmsStoreAsync();
   const vehicle =
     store.fleetVehicles.find((v) => v.id === parsed.data.vehicleId) ??
     SEED_FLEET_VEHICLES.find((v) => v.id === parsed.data.vehicleId) ??

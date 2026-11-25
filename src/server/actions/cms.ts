@@ -15,7 +15,11 @@ import {
   type ActionResponse,
 } from '@/lib/validations/contracts';
 import { nairaToKobo } from '@/lib/money';
-import { readCmsStore, writeCmsStore } from '@/server/services/cms-store';
+import { getAdminSession } from '@/server/auth/guards';
+import {
+  readCmsStoreAsync,
+  writeCmsStoreAsync,
+} from '@/server/services/cms-store';
 import type {
   CmsCategoryItem,
   CmsPageConfig,
@@ -24,6 +28,21 @@ import type {
   StayCategoryItem,
   StayPropertyView,
 } from '@/types';
+
+const UNAUTHORIZED_RESPONSE = {
+  data: null,
+  error: {
+    code: 'ERR_UNAUTHORIZED' as const,
+    message: 'Admin authentication required. Please sign in at /admin/login.',
+  },
+};
+
+async function verifyAdminAuthorized(): Promise<boolean> {
+  const session = await getAdminSession();
+  return Boolean(
+    session && (session.role === 'ADMIN' || session.role === 'SUPER_ADMIN')
+  );
+}
 
 function revalidateAllStorefrontRoutes(): void {
   try {
@@ -38,6 +57,7 @@ function revalidateAllStorefrontRoutes(): void {
     revalidatePath('/faqs');
     revalidatePath('/admin');
     revalidatePath('/admin/products');
+    revalidatePath('/admin/pages');
     revalidatePath('/admin/stays');
     revalidatePath('/admin/logistics');
     revalidateTag('products');
@@ -58,6 +78,10 @@ function slugify(text: string): string {
 export async function upsertProductCmsAction(
   rawInput: unknown
 ): Promise<ActionResponse<ProductCatalogItem>> {
+  if (!(await verifyAdminAuthorized())) {
+    return UNAUTHORIZED_RESPONSE;
+  }
+
   const parsed = cmsUpsertProductSchema.safeParse(rawInput);
   if (!parsed.success) {
     return {
@@ -80,7 +104,7 @@ export async function upsertProductCmsAction(
       ? nairaToKobo(input.compareAtPriceNaira)
       : null;
 
-  const store = readCmsStore();
+  const store = await readCmsStoreAsync();
   const isEditing = Boolean(input.id);
   const existingIndex = isEditing
     ? store.products.findIndex((p) => p.id === input.id)
@@ -182,7 +206,7 @@ export async function upsertProductCmsAction(
     store.products.unshift(nextProduct);
   }
 
-  writeCmsStore(store);
+  await writeCmsStoreAsync(store);
   revalidateAllStorefrontRoutes();
 
   return {
@@ -194,6 +218,10 @@ export async function upsertProductCmsAction(
 export async function quickUpdateProductStockCmsAction(
   rawInput: unknown
 ): Promise<ActionResponse<ProductCatalogItem>> {
+  if (!(await verifyAdminAuthorized())) {
+    return UNAUTHORIZED_RESPONSE;
+  }
+
   const parsed = cmsQuickStockUpdateSchema.safeParse(rawInput);
   if (!parsed.success) {
     return {
@@ -205,7 +233,7 @@ export async function quickUpdateProductStockCmsAction(
     };
   }
 
-  const store = readCmsStore();
+  const store = await readCmsStoreAsync();
   const productIndex = store.products.findIndex(
     (p) => p.id === parsed.data.productId
   );
@@ -241,7 +269,7 @@ export async function quickUpdateProductStockCmsAction(
   };
 
   store.products[productIndex] = updatedProduct;
-  writeCmsStore(store);
+  await writeCmsStoreAsync(store);
   revalidateAllStorefrontRoutes();
 
   return {
@@ -253,6 +281,10 @@ export async function quickUpdateProductStockCmsAction(
 export async function deleteProductCmsAction(
   rawInput: unknown
 ): Promise<ActionResponse<{ deletedId: string }>> {
+  if (!(await verifyAdminAuthorized())) {
+    return UNAUTHORIZED_RESPONSE;
+  }
+
   const parsed = cmsDeleteEntitySchema.safeParse(rawInput);
   if (!parsed.success) {
     return {
@@ -264,7 +296,7 @@ export async function deleteProductCmsAction(
     };
   }
 
-  const store = readCmsStore();
+  const store = await readCmsStoreAsync();
   const exists = store.products.some((p) => p.id === parsed.data.id);
   if (!exists) {
     return {
@@ -277,7 +309,7 @@ export async function deleteProductCmsAction(
   }
 
   store.products = store.products.filter((p) => p.id !== parsed.data.id);
-  writeCmsStore(store);
+  await writeCmsStoreAsync(store);
   revalidateAllStorefrontRoutes();
 
   return {
@@ -289,6 +321,10 @@ export async function deleteProductCmsAction(
 export async function upsertCategoryCmsAction(
   rawInput: unknown
 ): Promise<ActionResponse<CmsCategoryItem>> {
+  if (!(await verifyAdminAuthorized())) {
+    return UNAUTHORIZED_RESPONSE;
+  }
+
   const parsed = cmsUpsertCategorySchema.safeParse(rawInput);
   if (!parsed.success) {
     return {
@@ -301,7 +337,7 @@ export async function upsertCategoryCmsAction(
     };
   }
 
-  const store = readCmsStore();
+  const store = await readCmsStoreAsync();
   const normalizedLabel = parsed.data.label.trim().toLowerCase();
   const duplicateLabel = store.categories.some(
     (c) =>
@@ -325,7 +361,7 @@ export async function upsertCategoryCmsAction(
     store.categories.push(parsed.data);
   }
 
-  writeCmsStore(store);
+  await writeCmsStoreAsync(store);
   revalidateAllStorefrontRoutes();
 
   return {
@@ -337,6 +373,10 @@ export async function upsertCategoryCmsAction(
 export async function deleteCategoryCmsAction(
   rawInput: unknown
 ): Promise<ActionResponse<{ deletedId: string }>> {
+  if (!(await verifyAdminAuthorized())) {
+    return UNAUTHORIZED_RESPONSE;
+  }
+
   const parsed = cmsDeleteEntitySchema.safeParse(rawInput);
   if (!parsed.success) {
     return {
@@ -348,9 +388,9 @@ export async function deleteCategoryCmsAction(
     };
   }
 
-  const store = readCmsStore();
+  const store = await readCmsStoreAsync();
   store.categories = store.categories.filter((c) => c.id !== parsed.data.id);
-  writeCmsStore(store);
+  await writeCmsStoreAsync(store);
   revalidateAllStorefrontRoutes();
 
   return {
@@ -367,6 +407,10 @@ export interface UpsertStayCategoryResult {
 export async function upsertStayCategoryCmsAction(
   rawInput: unknown
 ): Promise<ActionResponse<UpsertStayCategoryResult>> {
+  if (!(await verifyAdminAuthorized())) {
+    return UNAUTHORIZED_RESPONSE;
+  }
+
   const parsed = cmsUpsertStayCategorySchema.safeParse(rawInput);
   if (!parsed.success) {
     return {
@@ -380,7 +424,7 @@ export async function upsertStayCategoryCmsAction(
   }
 
   const input = parsed.data;
-  const store = readCmsStore();
+  const store = await readCmsStoreAsync();
   const normalizedName = input.name.trim().toLowerCase();
   const duplicate = store.stayCategories.some(
     (c) =>
@@ -404,7 +448,8 @@ export async function upsertStayCategoryCmsAction(
     existingIdx >= 0 ? store.stayCategories[existingIdx] : undefined;
 
   const categoryId =
-    existing?.id ?? `stay-cat-${slugify(input.name)}-${Date.now().toString().slice(-4)}`;
+    existing?.id ??
+    `stay-cat-${slugify(input.name)}-${Date.now().toString().slice(-4)}`;
 
   const nextCategory: StayCategoryItem = {
     id: categoryId,
@@ -430,7 +475,7 @@ export async function upsertStayCategoryCmsAction(
     store.stayCategories.push(nextCategory);
   }
 
-  writeCmsStore(store);
+  await writeCmsStoreAsync(store);
   revalidateAllStorefrontRoutes();
 
   return {
@@ -451,6 +496,10 @@ export interface DeleteStayCategoryResult {
 export async function deleteStayCategoryCmsAction(
   rawInput: unknown
 ): Promise<ActionResponse<DeleteStayCategoryResult>> {
+  if (!(await verifyAdminAuthorized())) {
+    return UNAUTHORIZED_RESPONSE;
+  }
+
   const parsed = cmsDeleteStayCategorySchema.safeParse(rawInput);
   if (!parsed.success) {
     return {
@@ -462,7 +511,7 @@ export async function deleteStayCategoryCmsAction(
     };
   }
 
-  const store = readCmsStore();
+  const store = await readCmsStoreAsync();
   const target = store.stayCategories.find((c) => c.id === parsed.data.id);
   if (!target) {
     return {
@@ -490,7 +539,7 @@ export async function deleteStayCategoryCmsAction(
   });
 
   store.stayCategories = remaining;
-  writeCmsStore(store);
+  await writeCmsStoreAsync(store);
   revalidateAllStorefrontRoutes();
 
   return {
@@ -506,6 +555,10 @@ export async function deleteStayCategoryCmsAction(
 export async function upsertPageConfigCmsAction(
   rawInput: unknown
 ): Promise<ActionResponse<CmsPageConfig>> {
+  if (!(await verifyAdminAuthorized())) {
+    return UNAUTHORIZED_RESPONSE;
+  }
+
   const parsed = cmsUpsertPageConfigSchema.safeParse(rawInput);
   if (!parsed.success) {
     return {
@@ -519,7 +572,7 @@ export async function upsertPageConfigCmsAction(
     };
   }
 
-  const store = readCmsStore();
+  const store = await readCmsStoreAsync();
   const nextPage: CmsPageConfig = {
     ...parsed.data,
     updatedAt: new Date().toISOString(),
@@ -532,7 +585,7 @@ export async function upsertPageConfigCmsAction(
     store.pages.push(nextPage);
   }
 
-  writeCmsStore(store);
+  await writeCmsStoreAsync(store);
   revalidateAllStorefrontRoutes();
 
   return {
@@ -544,6 +597,10 @@ export async function upsertPageConfigCmsAction(
 export async function upsertStayPropertyCmsAction(
   rawInput: unknown
 ): Promise<ActionResponse<StayPropertyView>> {
+  if (!(await verifyAdminAuthorized())) {
+    return UNAUTHORIZED_RESPONSE;
+  }
+
   const parsed = cmsUpsertStayPropertySchema.safeParse(rawInput);
   if (!parsed.success) {
     return {
@@ -557,7 +614,7 @@ export async function upsertStayPropertyCmsAction(
   }
 
   const input = parsed.data;
-  const store = readCmsStore();
+  const store = await readCmsStoreAsync();
   const existingIdx = input.id
     ? store.stayProperties.findIndex((s) => s.id === input.id)
     : -1;
@@ -641,7 +698,7 @@ export async function upsertStayPropertyCmsAction(
     store.stayProperties.push(nextProperty);
   }
 
-  writeCmsStore(store);
+  await writeCmsStoreAsync(store);
   revalidateAllStorefrontRoutes();
 
   return {
@@ -653,6 +710,10 @@ export async function upsertStayPropertyCmsAction(
 export async function deleteStayPropertyCmsAction(
   rawInput: unknown
 ): Promise<ActionResponse<{ deletedId: string }>> {
+  if (!(await verifyAdminAuthorized())) {
+    return UNAUTHORIZED_RESPONSE;
+  }
+
   const parsed = cmsDeleteEntitySchema.safeParse(rawInput);
   if (!parsed.success) {
     return {
@@ -664,11 +725,11 @@ export async function deleteStayPropertyCmsAction(
     };
   }
 
-  const store = readCmsStore();
+  const store = await readCmsStoreAsync();
   store.stayProperties = store.stayProperties.filter(
     (s) => s.id !== parsed.data.id
   );
-  writeCmsStore(store);
+  await writeCmsStoreAsync(store);
   revalidateAllStorefrontRoutes();
 
   return {
@@ -680,6 +741,10 @@ export async function deleteStayPropertyCmsAction(
 export async function upsertFleetVehicleCmsAction(
   rawInput: unknown
 ): Promise<ActionResponse<FleetVehicleView>> {
+  if (!(await verifyAdminAuthorized())) {
+    return UNAUTHORIZED_RESPONSE;
+  }
+
   const parsed = cmsUpsertFleetVehicleSchema.safeParse(rawInput);
   if (!parsed.success) {
     return {
@@ -693,7 +758,7 @@ export async function upsertFleetVehicleCmsAction(
   }
 
   const input = parsed.data;
-  const store = readCmsStore();
+  const store = await readCmsStoreAsync();
   const existingIdx = input.id
     ? store.fleetVehicles.findIndex((v) => v.id === input.id)
     : -1;
@@ -725,7 +790,7 @@ export async function upsertFleetVehicleCmsAction(
     store.fleetVehicles.push(nextVehicle);
   }
 
-  writeCmsStore(store);
+  await writeCmsStoreAsync(store);
   revalidateAllStorefrontRoutes();
 
   return {
@@ -737,6 +802,10 @@ export async function upsertFleetVehicleCmsAction(
 export async function deleteFleetVehicleCmsAction(
   rawInput: unknown
 ): Promise<ActionResponse<{ deletedId: string }>> {
+  if (!(await verifyAdminAuthorized())) {
+    return UNAUTHORIZED_RESPONSE;
+  }
+
   const parsed = cmsDeleteEntitySchema.safeParse(rawInput);
   if (!parsed.success) {
     return {
@@ -748,11 +817,11 @@ export async function deleteFleetVehicleCmsAction(
     };
   }
 
-  const store = readCmsStore();
+  const store = await readCmsStoreAsync();
   store.fleetVehicles = store.fleetVehicles.filter(
     (v) => v.id !== parsed.data.id
   );
-  writeCmsStore(store);
+  await writeCmsStoreAsync(store);
   revalidateAllStorefrontRoutes();
 
   return {

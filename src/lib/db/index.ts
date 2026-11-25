@@ -19,4 +19,5 @@ if (env.NODE_ENV !== 'production') {
   globalForDb.conn = conn;
 }
 
+export const sql = conn;
 export const db = drizzle(conn, { schema });

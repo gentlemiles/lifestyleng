@@ -1,4 +1,16 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { LogOut } from 'lucide-react';
+import { getAdminSession } from '@/server/auth/guards';
+import { logoutAdminAction } from '@/server/actions/auth';
+
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 const ADMIN_NAV_LINKS = [
   { href: '/admin', label: 'Overview' },
@@ -10,11 +22,16 @@ const ADMIN_NAV_LINKS = [
   { href: '/admin/mtn', label: 'MTN Leads' },
 ] as const;
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getAdminSession();
+  if (!session) {
+    redirect('/admin/login');
+  }
+
   return (
     <div className="min-h-screen bg-[#F8F9FA] text-[#1B1B1D]">
       <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white">
@@ -51,18 +68,27 @@ export default function AdminLayout({
           </div>
 
           <div className="flex items-center gap-2">
-            <Link
-              href="/shop/clothes"
-              className="rounded-md border border-neutral-200 bg-white px-3 py-1.5 text-xs font-medium text-neutral-700 hover:bg-neutral-50"
+            <span
+              title={session.email}
+              className="hidden max-w-[180px] truncate text-[11px] font-medium text-neutral-500 xl:inline"
             >
-              View Shop ↗
-            </Link>
+              {session.email}
+            </span>
             <Link
               href="/"
-              className="rounded-md bg-neutral-950 px-3 py-1.5 text-xs font-medium text-white hover:bg-neutral-800"
+              className="rounded-md border border-neutral-200 bg-white px-3 py-1.5 text-xs font-medium text-neutral-700 hover:bg-neutral-50"
             >
               Storefront ↗
             </Link>
+            <form action={logoutAdminAction}>
+              <button
+                type="submit"
+                className="inline-flex items-center gap-1.5 rounded-md bg-neutral-950 px-3 py-1.5 text-xs font-medium text-white hover:bg-neutral-800"
+              >
+                <LogOut className="h-3.5 w-3.5" />
+                Sign Out
+              </button>
+            </form>
           </div>
         </div>
       </header>

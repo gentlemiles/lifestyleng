@@ -1,4 +1,4 @@
-import { readCmsStore } from '@/server/services/cms-store';
+import { readCmsStoreAsync } from '@/server/services/cms-store';
 import type {
   CmsCategoryItem,
   CmsPageConfig,
@@ -10,13 +10,13 @@ import type {
 } from '@/types';
 
 export async function getAllProductsCatalog(): Promise<ProductCatalogItem[]> {
-  return readCmsStore().products;
+  return (await readCmsStoreAsync()).products;
 }
 
 export async function getFashionCatalog(
   subPillar?: ProductSubPillar
 ): Promise<ProductCatalogItem[]> {
-  const fashion = readCmsStore().products.filter(
+  const fashion = (await readCmsStoreAsync()).products.filter(
     (p) => p.division === 'FASHION_BOUTIQUE'
   );
   if (!subPillar) {
@@ -28,39 +28,44 @@ export async function getFashionCatalog(
 export async function getProductBySlug(
   slug: string
 ): Promise<ProductCatalogItem | null> {
-  return readCmsStore().products.find((p) => p.slug === slug) ?? null;
+  return (await readCmsStoreAsync()).products.find((p) => p.slug === slug) ?? null;
 }
 
 export async function getMtnHardwareCatalog(): Promise<ProductCatalogItem[]> {
-  return readCmsStore().products.filter((p) => p.division === 'MTN_SERVICES');
+  return (await readCmsStoreAsync()).products.filter(
+    (p) => p.division === 'MTN_SERVICES'
+  );
 }
 
 export async function getCategoriesCatalog(): Promise<CmsCategoryItem[]> {
-  return readCmsStore().categories;
+  return (await readCmsStoreAsync()).categories;
 }
 
 export async function getStayCategoriesCatalog(): Promise<StayCategoryItem[]> {
-  return readCmsStore().stayCategories;
+  return (await readCmsStoreAsync()).stayCategories;
 }
 
 export async function getStayPropertiesCatalog(): Promise<StayPropertyView[]> {
-  return readCmsStore().stayProperties;
+  return (await readCmsStoreAsync()).stayProperties;
 }
 
 export async function getStayPropertyBySlug(
   slug: string
 ): Promise<StayPropertyView | null> {
-  return readCmsStore().stayProperties.find((s) => s.slug === slug) ?? null;
+  return (
+    (await readCmsStoreAsync()).stayProperties.find((s) => s.slug === slug) ??
+    null
+  );
 }
 
 export async function getFleetVehiclesCatalog(): Promise<FleetVehicleView[]> {
-  return readCmsStore().fleetVehicles;
+  return (await readCmsStoreAsync()).fleetVehicles;
 }
 
 export async function getStorefrontPageConfig(
   pagePath: CmsPageConfig['path']
 ): Promise<CmsPageConfig> {
-  const store = readCmsStore();
+  const store = await readCmsStoreAsync();
   const found = store.pages.find((p) => p.path === pagePath);
   if (found) return found;
   return (
@@ -80,5 +85,5 @@ export async function getStorefrontPageConfig(
 }
 
 export async function getAllStorefrontPagesConfig(): Promise<CmsPageConfig[]> {
-  return readCmsStore().pages;
+  return (await readCmsStoreAsync()).pages;
 }

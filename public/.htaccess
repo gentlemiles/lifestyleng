@@ -3,11 +3,9 @@
 # Parent Organization: Lifestyle Corporate Networks Ltd. (Abuja, Nigeria)
 #
 # HOSTINGER DEPLOYMENT NOTES:
-# - On Hostinger Node.js Web App hosting (recommended for Next.js 15 App Router,
-#   Server Actions, Checkout, and `/admin`), LiteSpeed proxies requests to Node
-#   while honoring HTTPS enforcement, static caching, and security headers here.
-# - Decap CMS is served statically at `/admin/index.html` and `/admin/config.yml`
-#   without interfering with the Next.js App Router dashboard at `/admin`.
+# - On Hostinger Node.js Web App hosting (Next.js 15 App Router, Server Actions,
+#   PostgreSQL-backed `/admin` CMS, and Checkout), LiteSpeed proxies requests to
+#   Node while honoring HTTPS enforcement, static caching, and security headers.
 # ==============================================================================
 
 Options -Indexes
@@ -38,11 +36,7 @@ Options -Indexes
   # 3. Permanent 308 redirect for legacy MTN FibreX route (mirrors next.config.ts)
   RewriteRule ^mtn-fibrex/?$ /mtn-services/fibrex [L,R=308]
 
-  # 4. Serve Decap CMS static entry directly without falling through
-  RewriteRule ^admin/index\.html$ - [L]
-  RewriteRule ^admin/config\.yml$ - [L]
-
-  # 5. Serve existing static files and directories directly
+  # 4. Serve existing static files and directories directly
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
@@ -71,14 +65,9 @@ Options -Indexes
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(self)"
 
-  # Immutable caching for /images/* assets (including Prince & Princess stays and Decap uploads)
+  # Immutable caching for /images/* assets
   <FilesMatch "\.(avif|webp|jpe?g|png|svg|ico|woff2)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
-  </FilesMatch>
-
-  # Never cache Decap CMS config.yml so collection schema changes load immediately
-  <FilesMatch "^config\.yml$">
-    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
   </FilesMatch>
 </IfModule>
 

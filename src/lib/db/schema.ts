@@ -506,3 +506,12 @@ export const adminAuditLogs = pgTable('admin_audit_logs', {
   ipAddress: text('ip_address'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
 });
+
+// --- 8. PERSISTENT CMS STORE SNAPSHOT (HOSTINGER MANAGED POSTGRESQL) ---
+export const cmsState = pgTable('cms_state', {
+  id: text('id').primaryKey(),
+  payload: jsonb('payload').notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});

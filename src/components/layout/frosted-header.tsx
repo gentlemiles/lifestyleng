@@ -57,7 +57,6 @@ const SUPPORT_LINKS = [
   { href: '/about', label: 'About Us' },
   { href: '/contact', label: 'Store Locations & Contact' },
   { href: '/faqs', label: 'FAQs' },
-  { href: '/admin/products', label: 'Store CMS (Admin)' },
 ] as const;
 
 export function FrostedHeader() {

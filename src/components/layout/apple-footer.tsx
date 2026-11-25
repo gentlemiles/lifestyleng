@@ -121,14 +121,6 @@ export function AppleFooter() {
                   Contact
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="/admin/products"
-                  className="font-semibold text-[#006A6A] hover:underline"
-                >
-                  Store CMS
-                </Link>
-              </li>
             </ul>
           </div>
         </div>

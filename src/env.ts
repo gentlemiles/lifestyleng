@@ -14,6 +14,9 @@ export const env = createEnv({
       .string()
       .min(32)
       .default('lifestyleng_local_development_session_secret_key_32chars'),
+    ADMIN_EMAIL: z.string().email().default('admin@lifestyleng.com'),
+    ADMIN_PASSWORD: z.string().optional(),
+    ADMIN_PASSWORD_HASH: z.string().optional(),
     PAYSTACK_SECRET_KEY: z
       .string()
       .startsWith('sk_')
@@ -64,6 +67,9 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     DATABASE_URL: process.env.DATABASE_URL,
     SESSION_SECRET: process.env.SESSION_SECRET,
+    ADMIN_EMAIL: process.env.ADMIN_EMAIL,
+    ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
+    ADMIN_PASSWORD_HASH: process.env.ADMIN_PASSWORD_HASH,
     PAYSTACK_SECRET_KEY: process.env.PAYSTACK_SECRET_KEY,
     FLUTTERWAVE_SECRET_KEY: process.env.FLUTTERWAVE_SECRET_KEY,
     FLUTTERWAVE_WEBHOOK_SECRET_HASH: process.env.FLUTTERWAVE_WEBHOOK_SECRET_HASH,

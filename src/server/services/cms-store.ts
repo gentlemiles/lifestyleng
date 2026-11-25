@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { sql } from '@/lib/db';
 import {
   SEED_FLEET_VEHICLES,
   SEED_PRODUCTS_ALL,
@@ -475,4 +476,138 @@ export function writeCmsStore(nextState: CmsDatabaseState): void {
   } catch {
     // Ignore filesystem write errors in read-only test sandboxes
   }
+}
+
+const DEFAULT_LOCAL_PG_URL =
+  'postgresql://lifestyleng:local_dev_password@localhost:5432/lifestyleng_core';
+const CMS_STATE_ROW_ID = 'primary';
+
+let pgSchemaEnsured = false;
+
+function isPostgresPersistenceEnabled(): boolean {
+  if (process.env.VITEST === 'true' || process.env.NODE_ENV === 'test') {
+    return false;
+  }
+  const url = process.env.DATABASE_URL?.trim();
+  if (!url || url === DEFAULT_LOCAL_PG_URL) {
+    return false;
+  }
+  return url.startsWith('postgres://') || url.startsWith('postgresql://');
+}
+
+async function ensureCmsStateTable(): Promise<void> {
+  if (pgSchemaEnsured) return;
+  await sql`
+    CREATE TABLE IF NOT EXISTS cms_state (
+      id TEXT PRIMARY KEY,
+      payload JSONB NOT NULL,
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `;
+  pgSchemaEnsured = true;
+}
+
+function hydratePartialCmsState(
+  parsed: Partial<CmsDatabaseState>
+): { state: CmsDatabaseState; upgraded: boolean } {
+  const initial = createInitialState();
+  const persistedVersion =
+    typeof parsed.seedVersion === 'number' ? parsed.seedVersion : 1;
+
+  let products: ProductCatalogItem[] = Array.isArray(parsed.products)
+    ? parsed.products
+    : initial.products;
+  let upgraded = false;
+
+  if (
+    persistedVersion < CURRENT_SEED_VERSION &&
+    Array.isArray(parsed.products)
+  ) {
+    const existingIds = new Set(products.map((p) => p.id));
+    const existingSlugs = new Set(products.map((p) => p.slug));
+    const missingSeeds = initial.products.filter(
+      (seedItem) =>
+        !existingIds.has(seedItem.id) && !existingSlugs.has(seedItem.slug)
+    );
+    if (missingSeeds.length > 0) {
+      products = [...missingSeeds, ...products];
+    }
+    upgraded = true;
+  }
+
+  return {
+    state: {
+      seedVersion: CURRENT_SEED_VERSION,
+      products,
+      categories: Array.isArray(parsed.categories)
+        ? parsed.categories
+        : initial.categories,
+      stayCategories:
+        Array.isArray(parsed.stayCategories) &&
+        parsed.stayCategories.length > 0
+          ? parsed.stayCategories
+          : initial.stayCategories,
+      stayProperties: Array.isArray(parsed.stayProperties)
+        ? parsed.stayProperties.map((p) => normalizeStayProperty(p))
+        : initial.stayProperties,
+      fleetVehicles: Array.isArray(parsed.fleetVehicles)
+        ? parsed.fleetVehicles
+        : initial.fleetVehicles,
+      pages: Array.isArray(parsed.pages) ? parsed.pages : initial.pages,
+    },
+    upgraded,
+  };
+}
+
+export async function readCmsStoreAsync(): Promise<CmsDatabaseState> {
+  if (isPostgresPersistenceEnabled()) {
+    try {
+      await ensureCmsStateTable();
+      const rows = await sql<{ payload: Partial<CmsDatabaseState> }[]>`
+        SELECT payload FROM cms_state WHERE id = ${CMS_STATE_ROW_ID} LIMIT 1
+      `;
+      const row = rows[0];
+      if (row && row.payload) {
+        const { state, upgraded } = hydratePartialCmsState(row.payload);
+        if (upgraded) {
+          await writeCmsStoreAsync(state);
+        }
+        return state;
+      }
+
+      const initial = createInitialState();
+      await writeCmsStoreAsync(initial);
+      return initial;
+    } catch {
+      // Fall back to local JSON store if managed Postgres is temporarily unreachable
+    }
+  }
+
+  return readCmsStore();
+}
+
+export async function writeCmsStoreAsync(
+  nextState: CmsDatabaseState
+): Promise<void> {
+  const payload: CmsDatabaseState = {
+    ...nextState,
+    seedVersion: nextState.seedVersion ?? CURRENT_SEED_VERSION,
+  };
+
+  if (isPostgresPersistenceEnabled()) {
+    try {
+      await ensureCmsStateTable();
+      await sql`
+        INSERT INTO cms_state (id, payload, updated_at)
+        VALUES (${CMS_STATE_ROW_ID}, ${JSON.stringify(payload)}::jsonb, NOW())
+        ON CONFLICT (id)
+        DO UPDATE SET payload = EXCLUDED.payload, updated_at = NOW()
+      `;
+      return;
+    } catch {
+      // Fall through to local file store if Postgres write fails
+    }
+  }
+
+  writeCmsStore(payload);
 }
