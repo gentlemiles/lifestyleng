@@ -9,7 +9,7 @@ backend:
   name: github
   # IMPORTANT: Replace with your real GitHub organization/username and repository name
   # before publishing from production (e.g., lifestylecorporatenetworks/lifestyleng).
-  repo: YOUR_GITHUB_USERNAME/lifestyleng
+  repo: gentlemiles/lifestyleng
   branch: main
   # Hostinger Tier 2 GitHub OAuth Proxy (required for browser login with GitHub backend):
   # Deploy a lightweight GitHub OAuth handler (e.g., Cloudflare Worker or Hostinger Node route)
